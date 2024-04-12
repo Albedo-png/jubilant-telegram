@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="estilo.css">
+    <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+    <title>Quiz</title>
+</head>
+<body>
+
+<div id="menu-container">
+    <div id="header">
+        <h1>Quiz de Matemática</h1>
+    </div>
+    <div>
+        <h4 class="subtitulo">IMPOSSIBLE LEVEL</h4>
+    </div>
+    <input type="text" id="playerName" placeholder="Seu nome...">
+    <button id="startButton">Iniciar</button>
+    <!-- Botão para resetar o ranking -->
+    <!-- <button id="resetRankingButton">Resetar Ranking</button> -->
+</div>
+
+<div id="quiz-container" style="display: none;">
+    <div id="header">
+        <img src="image.png" alt="Logo">
+        <h2 id="question"></h2>
+        <div id="choices"></div>
+        <button id="submit" style="display: none;">Submit</button>
+        <div id="timer">Tempo restante: <span id="time">60</span> segundos</div>
+    </div>
+</div>
+
+<div id="lost-container" style="display: none;">
+    <h2>GAME OVER</h2>
+    <button id="returnButton">Tentar Novamente</button>
+</div>
+
+<div class="creditos" style="margin-top: 20px;">
+    <p>
+        <h4>Feito por: <a href="https://www.instagram.com/leozinkkj_vg/" target="_blank">Leonardo Vilhena</a>, <a href="https://www.instagram.com/_fr_bento/" target="_blank">Fernando Bento</a>, <a href="https://www.instagram.com/_guilherme.ggs/" target="_blank">Guilherme Gonçalves</a>, <a href="https://www.instagram.com/rodrigo_spz/" target="_blank">Rodrigo de Souza</a> e <a href="https://www.instagram.com/matheuscorsinipereira/" target="_blank">Matheus Corsini</a></h4>
+    </p>
+</div>
+
+<script>
+    const questions = [
+        {
+            question: "Qual é a solução da equação 2x + 5 = 17?",
+            choices: ["6", "8", "9", "11"],
+            answer: "6"
+        },
+        {
+            question: "Qual é a raiz quadrada de 144?",
+            choices: ["6", "10", "12", "16"],
+            answer: "12"
+        },
+        {
+            question: "Quanto é 3^(2x) quando x = 2?",
+            choices: ["9", "27", "81", "243"],
+            answer: "81"
+        },
+        {
+            question: "Qual é o valor de x na equação 2^x = 16?",
+            choices: ["x = 2", "x = 3", "x = 4", "x = 5"],
+            answer: "x = 4"
+        },
+        {
+            question: "Um fazendeiro tem 17 ovelhas. Todas, exceto 9, morreram. Quantas ovelhas ele tem agora?",
+            choices: ["8", "17", "13", "9"],
+            answer: "9"
+        },
+        {
+            question: "Um grupo de estudantes está organizando uma viagem de formatura. Eles precisam alugar um ônibus que tem capacidade para 50 passageiros. Se 35 alunos já confirmaram participação na viagem, quantos alunos ainda podem se inscrever para que não ultrapassem a capacidade máxima do ônibus?",
+            choices: ["50 alunos", "25 alunos", "15 alunos", "250 alunos"],
+            answer: "15 alunos"
+        },
+        {
+            question: "Um supermercado está oferecendo uma promoção de 20% de desconto em todos os produtos. Se um cliente comprou uma televisão que custa $800 antes do desconto, quanto ele pagará pela televisão após o desconto ser aplicado?",
+            choices: ["R$1000", "R$640", "R$543", "R$100"],
+            answer: "R$640"
+        },
+        {
+            question: "Uma loja de roupas está oferecendo uma promoção onde todos os itens estão com desconto de 30%. Se um cliente comprou uma camiseta que custa $20 antes do desconto, quanto ele pagará pela camiseta após o desconto ser aplicado?",
+            choices: ["R$12", "R$14", "R$9", "R$4"],
+            answer: "R$14"
+        },
+        {
+            question: "Se um retângulo tem um comprimento de 8 cm e uma largura de 5 cm, qual é sua área?",
+            choices: ["10m", "45cm", "40m", "40cm"],
+            answer: "40cm"
+        },
+        {
+            question: "Se um recipiente tem 2 litros de água e evaporam 500 mililitros por hora, quanto tempo levará para evaporar toda a água?",
+            choices: ["1,5 horas", "4 horas", "4,5 horas", "24 horas"],
+            answer: "4 horas"
+        },
+        {
+            question: "Se um supermercado vende 150 maçãs por dia e cada maçã custa R$ 1,50, qual é a receita diária com a venda de maçãs?",
+            choices: ["R$225,00", "R$225,50", "R$271,25", "R$1090,99"],
+            answer: "R$225,00"
+        },
+        {
+            question: "Se um tanque de gasolina tem capacidade para 50 litros e está atualmente cheio até 3/5 de sua capacidade, quantos litros de gasolina ele contém?",
+            choices: ["30L", "30ml", "45L", "15L"],
+            answer: "30L"
+        },
+        {
+            question: "Se você tiver 3 maçãs e pegar mais 2, quantas maçãs você terá?",
+            choices: ["1 maçãs", "5 maçãs", "2 maçãs", "3 maçãs"],
+            answer: "5 maçãs"
+        },
+        {
+            question: "Se um professor recebe um salário mensal de R$ 3000 e um bônus anual de R$ 2000, qual é seu salário total anual?",
+            choices: ["R$38000", "R$15000", "R$41000", "R$37500"],
+            answer: "R$38000"
+        },
+        {
+            question: "Se um triângulo tem lados medindo 5 cm, 12 cm e 13 cm, qual é o tipo de triângulo?",
+            choices: ["Triângulo retângulo", "Triângulo Acutângulo", "Triângulos isósceles", "Triângulo hipotenusa"],
+            answer: "Triângulo retângulo"
+        },
+    ];
+
+    questions.sort(() => Math.random() - 0.5);
+
+    const menuContainer = document.getElementById("menu-container");
+    const quizContainer = document.getElementById("quiz-container");
+    const playerNameInput = document.getElementById("playerName");
+    const startButton = document.getElementById("startButton");
+    const questionElement = document.getElementById("question");
+    const choicesElement = document.getElementById("choices");
+    const submitButton = document.getElementById("submit");
+    const timerElement = document.getElementById("timer");
+    const timeSpan = document.getElementById("time");
+    const returnButton = document.getElementById("returnButton");
+
+    let currentQuestion = 0;
+    let score = 0;
+    let playerName;
+    let timeLeft = 60; 
+
+    startButton.addEventListener("click", startQuiz);
+    returnButton.addEventListener("click", returnToMenu);
+
+    function startQuiz() {
+        playerName = playerNameInput.value;
+        menuContainer.style.display = "none";
+        quizContainer.style.display = "block";
+        showQuestion();
+        startTimer();
+    }
+
+    function startTimer() {
+    const timer = setInterval(() => {
+        timeLeft--;
+        timeSpan.textContent = timeLeft;
+        if (timeLeft <= 0) { 
+            clearInterval(timer);
+            showLostScreen(); 
+        }
+    }, 1000);
+}
+
+    function showQuestion() {
+        const question = questions[currentQuestion];
+        questionElement.textContent = question.question;
+        choicesElement.innerHTML = "";
+        question.choices.forEach(choice => {
+            const choiceButton = document.createElement("div");
+            choiceButton.classList.add("choice");
+            choiceButton.textContent = choice;
+            choiceButton.addEventListener("click", () => checkAnswer(choice));
+            choicesElement.appendChild(choiceButton);
+        });
+    }
+
+    function checkAnswer(choice) {
+        const question = questions[currentQuestion];
+        if (choice === question.answer) {
+            score++;
+            timeLeft += 30; 
+        } else {
+            timeLeft -= 15; 
+            if (timeLeft < 0) timeLeft = 0; 
+        }
+        currentQuestion++;
+        if (currentQuestion < questions.length) {
+            showQuestion();
+        } else {
+            endQuiz();
+        }
+    }
+
+    function endQuiz() {
+        const ranking = JSON.parse(localStorage.getItem("ranking") || "[]");
+        ranking.push({ name: playerName, score: score });
+        ranking.sort((a, b) => b.score - a.score);
+        localStorage.setItem("ranking", JSON.stringify(ranking.slice(0, 5)));
+
+        const rankingButton = document.createElement("button");
+        rankingButton.textContent = "Ver Ranking";
+        rankingButton.addEventListener("click", showRanking);
+        rankingButton.classList.add("ranking-button");
+
+        quizContainer.innerHTML = `<h2>Você completou o quiz!</h2>
+                                   <p>Sua pontuação: ${score} de ${questions.length}</p>`;
+        quizContainer.appendChild(rankingButton);
+    }
+
+    function showRanking() {
+        const ranking = JSON.parse(localStorage.getItem("ranking") || "[]");
+        let rankingHTML = "<h2>Top 5 Pontuações</h2>";
+        ranking.forEach((entry, index) => {
+            rankingHTML += `<p>${index + 1}. ${entry.name}: ${entry.score}</p>`;
+        });
+        // Exibir o ranking na página
+        quizContainer.innerHTML = rankingHTML;
+    }
+
+    function showLostScreen() {
+        const lostContainer = document.getElementById("lost-container");
+        const quizContainer = document.getElementById("quiz-container");
+        lostContainer.style.display = "block";
+        quizContainer.style.display = "none"; 
+    }
+
+    function returnToMenu() {
+        const lostContainer = document.getElementById("lost-container");
+        lostContainer.style.display = "none"; 
+        menuContainer.style.display = "block"; 
+        playerNameInput.value = ""; 
+        currentQuestion = 0; 
+        score = 0; 
+        timeLeft = 60; 
+        timeSpan.textContent = timeLeft; 
+    }
+
+    const resetRankingButton = document.getElementById("resetRankingButton");
+    resetRankingButton.addEventListener("click", resetRanking);
+    function resetRanking() {
+        localStorage.removeItem("ranking");
+        alert("O ranking foi resetado com sucesso!");
+    }
+</script>
+</body>
+</html>
